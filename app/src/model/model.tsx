@@ -16,39 +16,26 @@ interface ModelEntity {
   color: string;
 }
 
-// Function to load JSON files
-const loadJSON = async (url: string) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load ${url}: ${response.statusText}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Error loading JSON:", error);
-    return null;
-  }
-};
 
 // Main Model Component
 export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
 
-  //REMOVE FETCH 
   useEffect(() => {
-    const fetchData = async () => {
       try {
         if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
 
-        // ✅ Convert entityInfo to expected format (Record<string, { centerNormal: number[] }>)
+        // Convert entityInfo to expected format (Record<string, { centerNormal: number[] }>)
         const entityInfoMap = Object.fromEntries(
           entityInfo.map((entity) => [entity.entityId, { centerNormal: entity.centerNormal }])
         );
 
-        // ✅ Detect pockets using imported function
-        const detectedPockets = await detectPockets(adjacencyGraph, edgeMetadata, entityInfoMap);
+        // Detect pockets using imported function
+        const detectedPockets =  detectPockets(adjacencyGraph, edgeMetadata, entityInfoMap);
         setPockets(detectedPockets);
 
-        // ✅ Load the 3D model
+        // Load the 3D model
         new GLTFLoader().load("./colored_glb.glb", (gltf) => {
           const newModelEntities: ModelEntity[] = [];
 
@@ -58,7 +45,7 @@ export const Model = (): JSX.Element => {
             const meshElement = element as THREE.Mesh;
             const entityId = meshElement.name.replace("Product_1_", ""); // Extract entityId
 
-            // ✅ Assign pocket colors
+            // Assign pocket colors
             const pocketColor = detectedPockets.some((pocket) => pocket.includes(entityId))
               ? `hsl(${(detectedPockets.findIndex((pocket) => pocket.includes(entityId)) * 40) % 360}, 100%, 50%)`
               : "rgb(120, 120, 120)"; // Default color
@@ -75,23 +62,35 @@ export const Model = (): JSX.Element => {
       } catch (error) {
         console.error("Error loading data:", error);
       }
-    };
+    
 
-    fetchData();
   }, []);
 
   return (
     <div className="canvas-container">
       <Canvas camera={{ position: [0, 0, 300] }}>
-        <ambientLight />
-        <OrbitControls makeDefault />
+        {/*<ambientLight />
+        <OrbitControls makeDefault />*/}
+        <ambientLight intensity={0.4} />
+  <directionalLight position={[5, 10, 5]} intensity={1} />
+  <OrbitControls />
         <group>
-          {modelEnts.map((ent, index) => (
-            <mesh geometry={ent.bufferGeometry} key={index}>
-              <meshStandardMaterial color={ent.color} />
-            </mesh>
-          ))}
-        </group>
+  {modelEnts.map((ent, index) => {
+    const isPocket = pockets.some((pocket) => pocket.includes(ent.entityId));
+
+    return (
+      <mesh geometry={ent.bufferGeometry} key={index}>
+ <meshStandardMaterial
+  color={"#c0c0c0"} // Uniform silver/gray color
+  metalness={0.5} // Semi-metallic look
+  roughness={0.3} // Slightly smooth surface
+  envMapIntensity={0.8} // Subtle reflections
+  normalScale={new THREE.Vector2(1, 1)} // Enhance depth effect
+/>
+      </mesh>
+    );
+  })}
+</group>
       </Canvas>
     </div>
   );
