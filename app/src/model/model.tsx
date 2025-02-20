@@ -26,6 +26,7 @@ export const Model = (): JSX.Element => {
   const [hoveredPocket, setHoveredPocket] = useState<string | null>(null);
  // const [selectedPocket, setSelectedPocket] = useState<ModelEntity | null>(null);
  const [selectedPocket, setSelectedPocket] = useState<string[] | null>(null);
+ const [clickedEntity, setClickedEntity] = useState<string | null>(null);
 
 
 useEffect(() => {
@@ -100,12 +101,24 @@ useEffect(() => {
       },
     ])
   );
+
+  /*
   const handleEntityClick = (entityId: string) => {
     const pocket = pockets.find((pocket) => pocket.includes(entityId));
     if (pocket) {
       setSelectedPocket(pocket);
     }
+  };*/
+   // 🟢 On Entity Click → Find Pocket & Metadata
+   const handleEntityClick = (entityId: string) => {
+    const pocket = pockets.find((pocket) => pocket.includes(entityId));
+    if (pocket) {
+      setClickedEntity(entityId);  // Set the clicked entity
+      const sortedPocket = [entityId, ...pocket.filter((id) => id !== entityId)];
+      setSelectedPocket(sortedPocket);
+    }
   };
+
   return (
     <div className="canvas-container">
       <Canvas camera={{ position: [0, 0, 300] }}>
@@ -146,27 +159,17 @@ useEffect(() => {
       </Canvas>
 
 <Legend pockets={pockets} entityInfoMap={entityInfoMap} />
-{/*
-    {selectedPocket && (
-      <div className="pocket-info">
-        <h3>Pocket Details</h3>
-        <p><strong>Entity ID:</strong> {selectedPocket.entityId}</p>
-        <p><strong>Depth:</strong> {selectedPocket.depth?.toFixed(2) ?? "N/A"}</p>
-        <p><strong>Color:</strong> {selectedPocket.color}</p>
-        <button onClick={() => setSelectedPocket(null)}>Close</button>
-      </div>
-    )}*/}
 
-     {/* 🟢 Pocket Details Panel */}
-     {selectedPocket && (
+    {/* 🟢 Pocket Details Panel */}
+    {selectedPocket && (
         <div className="pocket-info">
           <h3>Pocket Details</h3>
           {selectedPocket.map((entityId) => {
             const metadata = entityInfoMap[entityId];
 
             return (
-              <div key={entityId} className="pocket-entity">
-                <h4>Entity ID: {entityId}</h4>
+              <div key={entityId} className="pocket-entity" style={{ backgroundColor: entityId === clickedEntity ? "#ffd700" : "transparent" }}>
+                <h4>{entityId === clickedEntity ? `🔹 Selected Entity ID: ${entityId}` : `Entity ID: ${entityId}`}</h4>
                 {metadata ? (
                   <ul>
                     <li><strong>Type:</strong> {metadata.entityType}</li>
@@ -184,7 +187,6 @@ useEffect(() => {
           <button onClick={() => setSelectedPocket(null)}>Close</button>
         </div>
       )}
-
     </div>
   );
 };
