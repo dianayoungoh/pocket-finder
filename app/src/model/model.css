@@ -27,7 +27,10 @@
 }
 
 
-
+.canvas-div {
+  height: 80vh;
+  width: 40vh;
+}
 .pocket-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -47,9 +50,7 @@
     outline: purple !important;
 }
 
-.pocket-grid{
 
-}
 .pocket-entity {
   border: 2px solid grey;
   border-radius: 3vh;
