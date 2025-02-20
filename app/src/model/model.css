@@ -5,21 +5,66 @@
 }
 
 
-  .pocket-info {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
+.pocket-info {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  /* background: rgba(255, 255, 255, 0.9); */
+  border: 1px solid #ddd;
+  width: 55%;
+  background: #e6e600;
+  border-radius: 8px;
+  /* height: 200vh; */
+  border: 3px solid #00000057;
+  display: grid
+;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 2.3vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 3vh;
+}
+
+
+
+.pocket-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+.canvas-container {
+  border: 3px solid #00000057;
+  height: 400px;
+  width: 600px;
+  border-radius: 3vh;
+}
   .pocket-info h3 {
     margin-top: 0;
   }
-  
+  * {
+    outline: purple !important;
+}
+
+.pocket-grid{
+
+}
+.pocket-entity {
+  border: 2px solid grey;
+  border-radius: 3vh;
+  border-style: inset;
+  /* background-color: yellow; */
+  background-color: red;
+}
+.pocket-grid > *:nth-child(odd) {
+  background-color: lightblue;
+}
+
+.pocket-grid > *:nth-child(even) {
+  background-color: lightpink;
+}
+
   .pocket-info button {
     margin-top: 10px;
     padding: 5px 10px;
