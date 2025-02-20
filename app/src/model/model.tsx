@@ -19,18 +19,32 @@ interface ModelEntity {
 export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
-  const [selectedPocketIndex, setSelectedPocketIndex] = useState<number | null>(null);
-  const [selectedEntities, setSelectedEntities] = useState<string[] | null>(null);
+  const [selectedPocketIndex, setSelectedPocketIndex] = useState<number | null>(
+    null
+  );
+  const [selectedEntities, setSelectedEntities] = useState<string[] | null>(
+    null
+  );
   const [clickedEntity, setClickedEntity] = useState<string | null>(null);
+  const [highlightedEntity, setHighlightedEntity] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
 
     const entityInfoMap = Object.fromEntries(
-      entityInfo.map((entity) => [entity.entityId, { centerNormal: entity.centerNormal }])
+      entityInfo.map((entity) => [
+        entity.entityId,
+        { centerNormal: entity.centerNormal },
+      ])
     );
 
-    const detectedPockets = detectPockets(adjacencyGraph, edgeMetadata, entityInfoMap);
+    const detectedPockets = detectPockets(
+      adjacencyGraph,
+      edgeMetadata,
+      entityInfoMap
+    );
     setPockets(detectedPockets);
 
     new GLTFLoader().load("./colored_glb.glb", (gltf) => {
@@ -45,13 +59,19 @@ export const Model = (): JSX.Element => {
         if (!material.color) return;
 
         const color = material.color;
-        const rgbId = `${Math.round(color.r * 255)}-${Math.round(color.g * 255)}-${Math.round(color.b * 255)}`;
+        const rgbId = `${Math.round(color.r * 255)}-${Math.round(
+          color.g * 255
+        )}-${Math.round(color.b * 255)}`;
         const entityId = rgbToEntityMap[rgbId];
 
         if (!entityId) return;
 
-        const isPocket = detectedPockets.some((pocket) => pocket.includes(entityId));
-        const pocketColor = isPocket ? "#afd6de" : `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`;
+        const isPocket = detectedPockets.some((pocket) =>
+          pocket.includes(entityId)
+        );
+        const pocketColor = isPocket
+          ? "#afd6de"
+          : `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`;
 
         newModelEntities.push({
           bufferGeometry: meshElement.geometry,
@@ -70,6 +90,7 @@ export const Model = (): JSX.Element => {
     setSelectedPocketIndex(index);
     setSelectedEntities(pockets[index]);
     setClickedEntity(null);
+    setHighlightedEntity(null);
   };
 
   // Handle entity click (only for pockets)
@@ -77,7 +98,11 @@ export const Model = (): JSX.Element => {
     const pocket = pockets.find((pocket) => pocket.includes(entityId));
     if (pocket) {
       setClickedEntity(entityId);
-      const sortedPocket = [entityId, ...pocket.filter((id) => id !== entityId)];
+      setHighlightedEntity(entityId);
+      const sortedPocket = [
+        entityId,
+        ...pocket.filter((id) => id !== entityId),
+      ];
       setSelectedEntities(sortedPocket);
       setSelectedPocketIndex(pockets.indexOf(pocket));
     }
@@ -85,9 +110,11 @@ export const Model = (): JSX.Element => {
 
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
-    if (clickedEntity === entityId) return "yellow"; // Highlight clicked entity
-    if (selectedEntities?.includes(entityId)) return "yellow"; // Highlight selected pocket entities
-    return "rgb(180, 180, 180)";
+    if (highlightedEntity === entityId) return "#feefa8"; // Highlight the selected entity
+    if (selectedEntities?.includes(entityId)) return "#e7c21a"; // Highlight pocket entities
+    return "#dde9f7";
+    
+ 
   };
 
   const entityInfoMap = Object.fromEntries(
@@ -118,29 +145,45 @@ export const Model = (): JSX.Element => {
           <OrbitControls />
           <group>
             {modelEnts.map((ent, index) => {
-              const isPocketEntity = pockets.some((pocket) => pocket.includes(ent.entityId));
+              const isPocketEntity = pockets.some((pocket) =>
+                pocket.includes(ent.entityId)
+              );
               return (
-                isPocketEntity && (
+               
                   <mesh
                     key={index}
                     geometry={ent.bufferGeometry}
                     onClick={() => handleEntityClick(ent.entityId)} // Handle entity click for pockets only
+                  //  onClick={() => isPocketEntity && handleEntityClick(ent.entityId)} // Only interact with pocket entities
+
                   >
                     <meshStandardMaterial
-                      metalness={0.5}
-                      roughness={0.3}
-                      envMapIntensity={0.8}
+                      metalness={1} // Fully metallic for a chrome-like effect
+                     // roughness={0.1} // Low roughness for a glossy finish
+                      //envMapIntensity={1} // Boost reflections
+                     // roughness={0.1} // Slightly smooth surface
+                      //envMapIntensity={0.2} // Subtle reflections
+                      normalScale={new THREE.Vector2(1, 1)} // Enhance depth effect
+
                       color={getEntityColor(ent.entityId)}
+                  
                     />
                   </mesh>
-                )
+                
               );
             })}
           </group>
         </Canvas>
 
         {/* Dropdown for Pocket Selection */}
-        <div style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)" }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 10,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <label>Select a Pocket: </label>
           <select
             value={selectedPocketIndex ?? ""}
@@ -157,19 +200,31 @@ export const Model = (): JSX.Element => {
       </div>
 
       {/* Right side: Pocket & Entity Details */}
-      <div style={{ flex: 1, padding: "10px", overflowY: "auto", borderLeft: "1px solid #ddd" }}>
+      <div
+        style={{
+          flex: 1,
+          padding: "10px",
+          overflowY: "auto",
+          borderLeft: "1px solid #ddd",
+        }}
+      >
         {selectedEntities ? (
           <>
-
-{clickedEntity && (
-          <>
-            {selectedPocketIndex !== null && (
-              <p><strong>Pocket:</strong> {selectedPocketIndex + 1}</p>
+            {clickedEntity && (
+              <p>
+                <strong>Pocket:</strong>{" "}
+                {selectedPocketIndex !== null
+                  ? `Pocket ${selectedPocketIndex + 1}`
+                  : "N/A"}
+              </p>
             )}
-          </>
-        )}
 
-            <h3>{clickedEntity ? "Entity Details" : `Pocket ${selectedPocketIndex! + 1} Details`}</h3>
+            <h3>
+              {clickedEntity
+                ? "Entity Details"
+                : `Pocket ${selectedPocketIndex! + 1} Details`}
+            </h3>
+
             {selectedEntities.map((entityId) => {
               const metadata = entityInfoMap[entityId];
               return (
@@ -177,19 +232,42 @@ export const Model = (): JSX.Element => {
                   key={entityId}
                   style={{
                     marginBottom: "10px",
-                    backgroundColor: entityId === clickedEntity ? "#ffd700" : "transparent",
+                    backgroundColor:
+                      entityId === highlightedEntity
+                        ? "#ffd700"
+                        : "transparent",
                     padding: "5px",
                     borderRadius: "5px",
+                    cursor: "pointer",
                   }}
+                  onClick={() => setHighlightedEntity(entityId)} // Highlight on entity selection
                 >
-                  <h4>{entityId === clickedEntity ? `🔹 Selected Entity ID: ${entityId}` : `Entity ID: ${entityId}`}</h4>
+                  <h4>
+                    {entityId === clickedEntity
+                      ? `🔹 Selected Entity ID: ${entityId}`
+                      : `Entity ID: ${entityId}`}
+                  </h4>
                   {metadata ? (
                     <ul>
-                      <li><strong>Type:</strong> {metadata.entityType}</li>
-                      <li><strong>Depth (Z):</strong> {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}</li>
-                      <li><strong>Area:</strong> {metadata.area?.toFixed(2) ?? "N/A"}</li>
-                      <li><strong>Center Point:</strong> {metadata.centerPoint?.join(", ") ?? "N/A"}</li>
-                      <li><strong>Min Radius:</strong> {metadata.minRadius?.toFixed(2) ?? "N/A"}</li>
+                      <li>
+                        <strong>Type:</strong> {metadata.entityType}
+                      </li>
+                      <li>
+                        <strong>Depth (Z):</strong>{" "}
+                        {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}
+                      </li>
+                      <li>
+                        <strong>Area:</strong>{" "}
+                        {metadata.area?.toFixed(2) ?? "N/A"}
+                      </li>
+                      <li>
+                        <strong>Center Point:</strong>{" "}
+                        {metadata.centerPoint?.join(", ") ?? "N/A"}
+                      </li>
+                      <li>
+                        <strong>Min Radius:</strong>{" "}
+                        {metadata.minRadius?.toFixed(2) ?? "N/A"}
+                      </li>
                     </ul>
                   ) : (
                     <p>No metadata available.</p>
@@ -197,13 +275,19 @@ export const Model = (): JSX.Element => {
                 </div>
               );
             })}
-            <button onClick={() => { setSelectedEntities(null); setClickedEntity(null); }}>Clear Selection</button>
+            <button
+              onClick={() => {
+                setSelectedEntities(null);
+                setClickedEntity(null);
+                setHighlightedEntity(null);
+              }}
+            >
+              Clear Selection
+            </button>
           </>
         ) : (
           <p>Select an entity or pocket to view details.</p>
         )}
-
-    
       </div>
     </div>
   );
