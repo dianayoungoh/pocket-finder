@@ -178,39 +178,6 @@ const handleEntityClick = (entityId: string) => {
 
     {/* 🟢 Pocket Details Panel */}
 
-
-    {/*
-    {selectedPocket && (
-        <div className="pocket-info">
-          <h3>Pocket Details</h3>
-
-          <div className = "pocket-grid">
-          {selectedPocket.map((entityId) => {
-            const metadata = entityInfoMap[entityId];
-
-            return (
-              <div key={entityId} className="pocket-entity" style={{ backgroundColor: entityId === clickedEntity ? "#ffd700" : "transparent" }}>
-                <h4>{entityId === clickedEntity ? `🔹 Selected Entity ID: ${entityId}` : `Entity ID: ${entityId}`}</h4>
-                {metadata ? (
-                  <ul>
-                    <li><strong>Type:</strong> {metadata.entityType}</li>
-                    <li><strong>Depth (Z):</strong> {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}</li>
-                    <li><strong>Area:</strong> {metadata.area?.toFixed(2) ?? "N/A"}</li>
-                    <li><strong>Center Point:</strong> {metadata.centerPoint?.join(", ") ?? "N/A"}</li>
-                    <li><strong>Min Radius:</strong> {metadata.minRadius?.toFixed(2) ?? "N/A"}</li>
-                  </ul>
-                ) : (
-                  <p>No metadata available.</p>
-                )}
-              </div>
-            );
-          })}
-
-          </div>
-          <button onClick={() => setSelectedPocket(null)}>Close</button>
-        </div>
-        )}*/}
-
 {selectedPocket && (
   <div className="pocket-info">
     <h3>Pocket Details</h3>
