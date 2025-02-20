@@ -8,7 +8,7 @@ import adjacencyGraph from "../data/adjacency_graph.json";
 import edgeMetadata from "../data/adjacency_graph_edge_metadata.json";
 import entityInfo from "../data/entity_geometry_info.json";
 import rgbToEntityMap from "../data/rgb_id_to_entity_id_map.json";
-
+import "./model2.css";
 interface ModelEntity {
   bufferGeometry: THREE.BufferGeometry;
   entityId: string;
@@ -111,7 +111,7 @@ export const Model = (): JSX.Element => {
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
     if (highlightedEntity === entityId) return "#feefa8"; // Highlight the selected entity
-    if (selectedEntities?.includes(entityId)) return "#e7c21a"; // Highlight pocket entities
+    if (selectedEntities?.includes(entityId)) return "#f4cf24"; // Highlight pocket entities
     return "#dde9f7";
     
  
@@ -136,10 +136,10 @@ export const Model = (): JSX.Element => {
   );
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div className = "main-body"/*style={{ display: "flex", height: "100vh" }}*/>
       {/* Left side: 3D Canvas */}
-      <div style={{ flex: 3, position: "relative" }}>
-        <Canvas camera={{ position: [0, 0, 300] }}>
+      <div className = "canvas-container" /*style={{ flex: 3, position: "relative" }}*/>
+        <Canvas className="canvas-block" camera={{ position: [0, 0, 300] }}>
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 10, 5]} intensity={1} />
           <OrbitControls />
@@ -200,16 +200,17 @@ export const Model = (): JSX.Element => {
       </div>
 
       {/* Right side: Pocket & Entity Details */}
-      <div
+      <div className= "right-module"
+      /*
         style={{
           flex: 1,
           padding: "10px",
           overflowY: "auto",
           borderLeft: "1px solid #ddd",
-        }}
+        }}*/
       >
         {selectedEntities ? (
-          <>
+          <div className= "pocket-grid">
             {clickedEntity && (
               <p>
                 <strong>Pocket:</strong>{" "}
@@ -234,7 +235,7 @@ export const Model = (): JSX.Element => {
                     marginBottom: "10px",
                     backgroundColor:
                       entityId === highlightedEntity
-                        ? "#ffd700"
+                        ? "#feefa8"
                         : "transparent",
                     padding: "5px",
                     borderRadius: "5px",
@@ -284,7 +285,7 @@ export const Model = (): JSX.Element => {
             >
               Clear Selection
             </button>
-          </>
+          </div>
         ) : (
           <p>Select an entity or pocket to view details.</p>
         )}

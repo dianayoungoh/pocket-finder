@@ -1,0 +1,30 @@
+.right-module{
+float:right
+}
+
+.pocket-grid {
+    display: grid
+;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+
+* {
+    outline: solid purple;
+}
+
+.pocket-squares{
+
+}
+
+.main-body{
+    display:flex
+}
+.canvas-container {
+    width: 100vh;
+    height: 80vh;
+}
+.canvas-block{
+
+}
