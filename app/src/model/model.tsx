@@ -17,7 +17,6 @@ interface ModelEntity {
   entityId: string;
   color: string;
   depth?: number;  
-
 }
 
 // Main Model Component
@@ -25,68 +24,10 @@ export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
   const [hoveredPocket, setHoveredPocket] = useState<string | null>(null);
-  const [selectedPocket, setSelectedPocket] = useState<ModelEntity | null>(null);
+ // const [selectedPocket, setSelectedPocket] = useState<ModelEntity | null>(null);
+ const [selectedPocket, setSelectedPocket] = useState<string[] | null>(null);
 
-/*
-  useEffect(() => {
-    try {
-      if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
 
-      // Convert entityInfo to expected format (Record<string, { centerNormal: number[] }>)
-      const entityInfoMap = Object.fromEntries(
-        entityInfo.map((entity) => [
-          entity.entityId,
-          { centerNormal: entity.centerNormal },
-        ])
-      );
-
-      // Detect pockets using imported function
-      const detectedPockets = detectPockets(
-        adjacencyGraph,
-        edgeMetadata,
-        entityInfoMap
-      );
-      setPockets(detectedPockets);
-
-      // Load the 3D model
-      new GLTFLoader().load("./colored_glb.glb", (gltf) => {
-        const newModelEntities: ModelEntity[] = [];
-
-        gltf.scene.traverse((element) => {
-          if (element.type !== "Mesh") return;
-
-          const meshElement = element as THREE.Mesh;
-          const entityId = meshElement.name.replace("Product_1_", ""); // Extract entityId
-
-          // Assign pocket colors
-          const pocketColor = detectedPockets.some((pocket) =>
-            pocket.includes(entityId)
-          )
-            ? `hsl(${
-                (detectedPockets.findIndex((pocket) =>
-                  pocket.includes(entityId)
-                ) *
-                  40) %
-                360
-              }, 100%, 50%)`
-            : "rgb(120, 120, 120)"; // Default color
-
-          newModelEntities.push({
-            bufferGeometry: meshElement.geometry as THREE.BufferGeometry,
-            entityId,
-            color: pocketColor,
-            depth: entityInfoMap[entityId]?.centerNormal[2],  // Assuming Z-normal represents depth
-
-          });
-        });
-
-        setModelEnts(newModelEntities);
-      });
-    } catch (error) {
-      console.error("Error loading data:", error);
-    }
-  }, []);
-*/
 useEffect(() => {
   try {
     if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
@@ -125,7 +66,7 @@ useEffect(() => {
 
         // Check if the entity belongs to a detected pocket
         const isPocket = detectedPockets.some((pocket) => pocket.includes(entityId));
-        const pocketColor = isPocket ?  "#83c9ef" : `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`;
+        const pocketColor = isPocket ?  "#afd6de" : `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`;
 
         newModelEntities.push({
           bufferGeometry: meshElement.geometry,
@@ -159,7 +100,12 @@ useEffect(() => {
       },
     ])
   );
-
+  const handleEntityClick = (entityId: string) => {
+    const pocket = pockets.find((pocket) => pocket.includes(entityId));
+    if (pocket) {
+      setSelectedPocket(pocket);
+    }
+  };
   return (
     <div className="canvas-container">
       <Canvas camera={{ position: [0, 0, 300] }}>
@@ -178,7 +124,8 @@ useEffect(() => {
               <mesh geometry={ent.bufferGeometry} key={index}
               onPointerOver={() => setHoveredPocket(ent.entityId)}
              onPointerOut={() => setHoveredPocket(null)}
-              onClick={() => setSelectedPocket(ent)}  // Set selected pocket on click
+           //   onClick={() => setSelectedPocket(ent)}  // Set selected pocket on click
+           onClick={() => isPocket && handleEntityClick(ent.entityId)} // Only for pockets
 
               >
                 <meshStandardMaterial
@@ -199,8 +146,7 @@ useEffect(() => {
       </Canvas>
 
 <Legend pockets={pockets} entityInfoMap={entityInfoMap} />
-
-    {/* Pocket Details (show when selected) */}
+{/*
     {selectedPocket && (
       <div className="pocket-info">
         <h3>Pocket Details</h3>
@@ -209,7 +155,36 @@ useEffect(() => {
         <p><strong>Color:</strong> {selectedPocket.color}</p>
         <button onClick={() => setSelectedPocket(null)}>Close</button>
       </div>
-    )}
+    )}*/}
+
+     {/* 🟢 Pocket Details Panel */}
+     {selectedPocket && (
+        <div className="pocket-info">
+          <h3>Pocket Details</h3>
+          {selectedPocket.map((entityId) => {
+            const metadata = entityInfoMap[entityId];
+
+            return (
+              <div key={entityId} className="pocket-entity">
+                <h4>Entity ID: {entityId}</h4>
+                {metadata ? (
+                  <ul>
+                    <li><strong>Type:</strong> {metadata.entityType}</li>
+                    <li><strong>Depth (Z):</strong> {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}</li>
+                    <li><strong>Area:</strong> {metadata.area?.toFixed(2) ?? "N/A"}</li>
+                    <li><strong>Center Point:</strong> {metadata.centerPoint?.join(", ") ?? "N/A"}</li>
+                    <li><strong>Min Radius:</strong> {metadata.minRadius?.toFixed(2) ?? "N/A"}</li>
+                  </ul>
+                ) : (
+                  <p>No metadata available.</p>
+                )}
+              </div>
+            );
+          })}
+          <button onClick={() => setSelectedPocket(null)}>Close</button>
+        </div>
+      )}
+
     </div>
   );
 };
