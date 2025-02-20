@@ -72,18 +72,14 @@ export const Model = (): JSX.Element => {
     setClickedEntity(null);
   };
 
-  // Handle entity click and prioritize clicked entity in the right panel
+  // Handle entity click (only for pockets)
   const handleEntityClick = (entityId: string) => {
-    setClickedEntity(entityId);
     const pocket = pockets.find((pocket) => pocket.includes(entityId));
     if (pocket) {
-      // Show clicked entity first, followed by other pocket entities
+      setClickedEntity(entityId);
       const sortedPocket = [entityId, ...pocket.filter((id) => id !== entityId)];
       setSelectedEntities(sortedPocket);
       setSelectedPocketIndex(pockets.indexOf(pocket));
-    } else {
-      setSelectedEntities([entityId]); // Show only the clicked entity if it's not in a pocket
-      setSelectedPocketIndex(null);
     }
   };
 
@@ -121,20 +117,25 @@ export const Model = (): JSX.Element => {
           <directionalLight position={[5, 10, 5]} intensity={1} />
           <OrbitControls />
           <group>
-            {modelEnts.map((ent, index) => (
-              <mesh
-                key={index}
-                geometry={ent.bufferGeometry}
-                onClick={() => handleEntityClick(ent.entityId)} // Handle entity click
-              >
-                <meshStandardMaterial
-                  metalness={0.5}
-                  roughness={0.3}
-                  envMapIntensity={0.8}
-                  color={getEntityColor(ent.entityId)}
-                />
-              </mesh>
-            ))}
+            {modelEnts.map((ent, index) => {
+              const isPocketEntity = pockets.some((pocket) => pocket.includes(ent.entityId));
+              return (
+                isPocketEntity && (
+                  <mesh
+                    key={index}
+                    geometry={ent.bufferGeometry}
+                    onClick={() => handleEntityClick(ent.entityId)} // Handle entity click for pockets only
+                  >
+                    <meshStandardMaterial
+                      metalness={0.5}
+                      roughness={0.3}
+                      envMapIntensity={0.8}
+                      color={getEntityColor(ent.entityId)}
+                    />
+                  </mesh>
+                )
+              );
+            })}
           </group>
         </Canvas>
 
@@ -159,6 +160,15 @@ export const Model = (): JSX.Element => {
       <div style={{ flex: 1, padding: "10px", overflowY: "auto", borderLeft: "1px solid #ddd" }}>
         {selectedEntities ? (
           <>
+
+{clickedEntity && (
+          <>
+            {selectedPocketIndex !== null && (
+              <p><strong>Pocket:</strong> {selectedPocketIndex + 1}</p>
+            )}
+          </>
+        )}
+
             <h3>{clickedEntity ? "Entity Details" : `Pocket ${selectedPocketIndex! + 1} Details`}</h3>
             {selectedEntities.map((entityId) => {
               const metadata = entityInfoMap[entityId];
@@ -193,15 +203,7 @@ export const Model = (): JSX.Element => {
           <p>Select an entity or pocket to view details.</p>
         )}
 
-        {clickedEntity && (
-          <>
-            <h3>Clicked Entity Details</h3>
-            <p><strong>Entity ID:</strong> {clickedEntity}</p>
-            {selectedPocketIndex !== null && (
-              <p><strong>Belongs to Pocket:</strong> {selectedPocketIndex + 1}</p>
-            )}
-          </>
-        )}
+    
       </div>
     </div>
   );
