@@ -258,7 +258,7 @@ const handleEntityClick2= (entityId: string) => {
       key={entityId}
       className="pocket-squares"
       style={{
-        backgroundColor: isSelected ? "#bac334" : "#1e174e",
+        backgroundColor: isSelected ? "#bac334" : "#163789",
         cursor: "pointer",
       }}
       onClick={() => {
@@ -282,6 +282,8 @@ const handleEntityClick2= (entityId: string) => {
   );
 })}
 
+         
+            </div>
             <button
               onClick={() => {
                 setSelectedEntities(null);
@@ -291,7 +293,6 @@ const handleEntityClick2= (entityId: string) => {
             >
               Clear Selection
             </button>
-            </div>
           </div>
         ) : (
           <p> Select an entity or pocket to view details.</p>
