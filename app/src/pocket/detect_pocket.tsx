@@ -8,7 +8,7 @@ const CONCAVE = 2;
 const isConcaveEdge = (
   id1: string,
   id2: string,
-  edgeMetadata: EdgeMetadata,
+  edgeMetadata: EdgeMetadata
 ): boolean => {
   const edgeKey = `${id1}-${id2}`;
   const reverseEdgeKey = `${id2}-${id1}`;
@@ -23,7 +23,7 @@ const bfs = (
   startEntity: string,
   adjacencyGraph: AdjacencyGraph,
   edgeMetadata: EdgeMetadata,
-  visited: Set<string>,
+  visited: Set<string>
 ): string[] => {
   const queue: string[] = [startEntity];
   const pocket: string[] = [];
@@ -49,7 +49,7 @@ const bfs = (
 // Main function to detect pockets
 const detectPockets = (
   adjacencyGraph: AdjacencyGraph,
-  edgeMetadata: EdgeMetadata,
+  edgeMetadata: EdgeMetadata
 ): string[][] => {
   const visited = new Set<string>();
   const pockets: string[][] = [];

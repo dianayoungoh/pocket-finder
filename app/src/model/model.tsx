@@ -35,7 +35,6 @@ const entityInfoMap = Object.fromEntries(
   ])
 );
 
-
 export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
@@ -50,12 +49,11 @@ export const Model = (): JSX.Element => {
     null
   );
 
-  useEffect(() => {
-    if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
 
-    const detectedPockets = detectPockets(
-      adjacencyGraph,
-      edgeMetadata);
+  useEffect(() => {
+    if (!adjacencyGraph || !edgeMetadata) return;
+
+    const detectedPockets = detectPockets(adjacencyGraph, edgeMetadata);
     setPockets(detectedPockets);
 
     new GLTFLoader().load("./colored_glb.glb", (gltf) => {
@@ -77,17 +75,10 @@ export const Model = (): JSX.Element => {
 
         if (!entityId) return;
 
-        const isPocket = detectedPockets.some((pocket) =>
-          pocket.includes(entityId)
-        );
-        const pocketColor = isPocket
-          ? "#afd6de"
-          : `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`;
-
         newModelEntities.push({
           bufferGeometry: meshElement.geometry,
           entityId,
-          color: pocketColor,
+          color: `rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255})`,
           depth: entityInfoMap[entityId]?.centerNormal?.[2],
         });
       });
@@ -95,6 +86,7 @@ export const Model = (): JSX.Element => {
       setModelEnts(newModelEntities);
     });
   }, []);
+
 
   // Handle pocket dropdown selection
   const handlePocketSelection = (index: number) => {
@@ -131,13 +123,10 @@ export const Model = (): JSX.Element => {
     return "#dde9f7";
   };
 
-
   return (
     <div className="main-body">
       {/* Left side: 3D Canvas */}
-      <div
-        className="canvas-container" 
-      >
+      <div className="canvas-container">
         <Canvas className="canvas-block" camera={{ position: [0, 0, 300] }}>
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 10, 5]} intensity={1} />
