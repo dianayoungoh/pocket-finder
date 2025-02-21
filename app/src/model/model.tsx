@@ -135,8 +135,8 @@ const handleEntityClick2= (entityId: string) => {
 
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
-    if (highlightedEntity === entityId) return "#feefa8"; // Highlight the selected entity
-    if (selectedEntities?.includes(entityId)) return "#f4cf24"; // Highlight pocket entities
+    if (highlightedEntity === entityId) return "#bac334"; // Highlight the selected entity
+    if (selectedEntities?.includes(entityId)) return "#c88204"; // Highlight pocket entities
     return "#dde9f7";
   
   };
@@ -236,7 +236,7 @@ const handleEntityClick2= (entityId: string) => {
               <p>
                 <strong>Pocket:</strong>{" "}
                 {selectedPocketIndex !== null
-                  ? `Pocket ${selectedPocketIndex + 1}`
+                  ? ` ${selectedPocketIndex + 1}`
                   : "N/A"}
               </p>
             )}
@@ -258,7 +258,7 @@ const handleEntityClick2= (entityId: string) => {
       key={entityId}
       className="pocket-squares"
       style={{
-        backgroundColor: isSelected ? "#feefa8" : "#dde9f7",
+        backgroundColor: isSelected ? "#bac334" : "#1e174e",
         cursor: "pointer",
       }}
       onClick={() => {

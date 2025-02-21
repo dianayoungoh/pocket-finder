@@ -4,10 +4,16 @@
     border: solid;
     border-radius: 3vh;
     width: 55%;
-   /* height: calc(100vh - 80px);*/
-   height:100vh;
+    border-color: #d69e16d6;
+    border-width: 4px;
+    /* height: calc(100vh - 80px); */
+    height: 100vh;
     max-height: 100%;
+    background: #04001f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 2vh;
     /* height: fit-content; */
+    color:white;
 }
 .pocket-grid {
     display: grid
@@ -18,18 +24,22 @@
 
 .bottom-module-container{}
 .bottom-module {
-    border-color: grey;
-    outline: 2px solid;
+    /* border-color: grey; */
+    /* outline: 2px solid; */
     border-radius: 3vh;
-    background-color: lightgrey;
-    height: 15vh;
+    background-color: #1e174e;
+    height: 18vh;
     justify-content: center;
-     display: flex;
-     margin-top:1.5vh;
-; 
+    display: flex
+;
+    margin-top: 1.5vh;
     align-items: center;
+    color: white;
+    border-width: 3.5px;
+    border-color: #f4fbebd6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-style: solid;
 }
-
 * {
     /*outline: solid rgb(145, 113, 145);*/
     font-family: 'Calibri', sans-serif;  /*to do add a body tag*/
@@ -50,10 +60,13 @@ li {
     letter-spacing: 7px;
     font-weight: 1000;
 }
+
+
 .pocket-squares {
-    background-color: #80808030;
+    background-color: #1e174e ;
     border-radius: 3vh;
     padding: 2.3vh;
+    color: white;
 }
 
 .canvas {
@@ -62,11 +75,14 @@ li {
     background: #80808017;
 }
 
-body {
-  /*  height: 100vh;*/
-  /* overflow: hidden;*/
-}
 
+body {
+    /* height: 100vh; */
+    /* overflow: hidden; */
+    /*background: #bdcae187;*/
+    background: #8b8c8f87;
+    padding:2vh;
+}
 .main-body{
     display:flex;
 }
@@ -74,10 +90,14 @@ body {
     width: 100vh;
     height: 84vh;
     /* margin: 2vh; */
-    border: solid;
     margin-right: 1vh;
     border-radius: 3vh;
     margin-bottom: 2vh;
+    background: #04001f;
+    border: solid;
+    border-color: #56c1ffd6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-width: 3.5px;
 }
 .pocket-squares ul {
     list-style: none;
