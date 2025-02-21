@@ -1,3 +1,5 @@
+/* DIANA YOUNG OH - POCKET FINDER */
+
 type AdjacencyGraph = Record<string, string[]>; // face ID -> connected faces
 type EdgeMetadata = Record<string, number[]>; //  "ID1-ID2" -> [edge types]
 

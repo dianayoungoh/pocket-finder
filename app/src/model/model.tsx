@@ -1,3 +1,5 @@
+/* DIANA YOUNG OH - POCKET FINDER */
+
 import React, { useState, useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
@@ -141,7 +143,7 @@ export const Model = (): JSX.Element => {
                   onClick={() => handleEntityClick(ent.entityId)} // Handle entity click for pockets only
                 >
                   <meshStandardMaterial
-                    metalness={1} // Fully metallic for a chrome-like effect
+                    metalness={1} // For a chrome-like effect
                     roughness={0.8} // Low roughness for a glossy finish
                     envMapIntensity={0.7} // Subtle reflections
                     normalScale={new THREE.Vector2(1, 1)} // Enhance depth effect
