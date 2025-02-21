@@ -163,7 +163,7 @@ export const Model = (): JSX.Element => {
                 >
                   <meshStandardMaterial
                     metalness={1} // Fully metallic for a chrome-like effect
-                     roughness={0.8} // Low roughness for a glossy finish
+                    roughness={0.8} // Low roughness for a glossy finish
                     envMapIntensity={0.7} // Subtle reflections
                     normalScale={new THREE.Vector2(1, 1)} // Enhance depth effect
                     color={getEntityColor(ent.entityId)}
@@ -175,10 +175,7 @@ export const Model = (): JSX.Element => {
         </Canvas>
 
         {/* Dropdown for Pocket Selection */}
-        <div
-          className="bottom-module"
-         
-        >
+        <div className="bottom-module">
           <div className="bottom-module-container">
             <label>Pocket: </label>
             <select
@@ -209,7 +206,6 @@ export const Model = (): JSX.Element => {
               </p>
             )}
             <div className="pocket-grid">
-          
               {selectedEntities.map((entityId) => {
                 const metadata = entityInfoMap[entityId];
                 const isSelected = entityId === highlightedEntity;
