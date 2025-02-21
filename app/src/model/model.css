@@ -6,7 +6,6 @@
   width: 55%;
   border-color: #c88204;
   border-width: 4px;
-  /* height: calc(100vh - 80px); */
   height: 100vh;
   max-height: 100%;
   background: #102966;
@@ -22,8 +21,7 @@
 }
 select {
   background: #c88204;
-  /* color: white; */
-  /* font-weight: bold; */
+
 }
 .pocket-grid {
   display: grid;
@@ -31,11 +29,8 @@ select {
   gap: 16px;
 }
 
-.bottom-module-container {
-}
+
 .bottom-module {
-  /* border-color: grey; */
-  /* outline: 2px solid; */
   border-radius: 3vh;
   background-color: #1e174e;
   height: 18vh;
@@ -51,13 +46,10 @@ select {
 }
 * {
   /*outline: solid rgb(145, 113, 145);*/
-  font-family: "Calibri", sans-serif; /*to do add a body tag*/
+  font-family: "Calibri", sans-serif;  /*to do add a body tag*/
 }
 
 li {
-  /* outline: solid black; */
-  /* border-bottom-color: pink; */
-  /* outline: thin; */
   border-bottom: solid;
   border-color: grey;
   /* border-style: dashed; */
@@ -85,9 +77,7 @@ li {
 }
 
 body {
-  /* height: 100vh; */
-  /* overflow: hidden; */
-  /*background: #bdcae187;*/
+
   background: #8b8c8f87;
   padding: 2vh;
 }
@@ -111,9 +101,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  /* padding: 4vh; */
-  /* margin: 1.5vh 0; */
-  /* margin-bottom: 2vh; */
 }
 /* Card hover effect */
 .pocket-squares:hover {
@@ -124,8 +111,5 @@ body {
 label {
   font-weight: bold;
 }
-.canvas-block {
-}
 
-.pocket-parent {
-}
+

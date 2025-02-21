@@ -8,6 +8,7 @@ import adjacencyGraph from "../data/adjacency_graph.json";
 import edgeMetadata from "../data/adjacency_graph_edge_metadata.json";
 import entityInfo from "../data/entity_geometry_info.json";
 import rgbToEntityMap from "../data/rgb_id_to_entity_id_map.json";
+
 import "./model.css";
 interface ModelEntity {
   bufferGeometry: THREE.BufferGeometry;
@@ -20,14 +21,14 @@ export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
   const [selectedPocketIndex, setSelectedPocketIndex] = useState<number | null>(
-    null,
+    null
   );
   const [selectedEntities, setSelectedEntities] = useState<string[] | null>(
-    null,
+    null
   );
   const [clickedEntity, setClickedEntity] = useState<string | null>(null);
   const [highlightedEntity, setHighlightedEntity] = useState<string | null>(
-    null,
+    null
   );
 
   useEffect(() => {
@@ -37,13 +38,13 @@ export const Model = (): JSX.Element => {
       entityInfo.map((entity) => [
         entity.entityId,
         { centerNormal: entity.centerNormal },
-      ]),
+      ])
     );
 
     const detectedPockets = detectPockets(
       adjacencyGraph,
       edgeMetadata,
-      entityInfoMap,
+      entityInfoMap
     );
     setPockets(detectedPockets);
 
@@ -60,14 +61,14 @@ export const Model = (): JSX.Element => {
 
         const color = material.color;
         const rgbId = `${Math.round(color.r * 255)}-${Math.round(
-          color.g * 255,
+          color.g * 255
         )}-${Math.round(color.b * 255)}`;
         const entityId = rgbToEntityMap[rgbId];
 
         if (!entityId) return;
 
         const isPocket = detectedPockets.some((pocket) =>
-          pocket.includes(entityId),
+          pocket.includes(entityId)
         );
         const pocketColor = isPocket
           ? "#afd6de"
@@ -113,30 +114,6 @@ export const Model = (): JSX.Element => {
     }
   };
 
-  // Handle entity click (only for pockets)
-  const handleEntityClick2 = (entityId: string) => {
-    if (highlightedEntity === entityId) {
-      // If the clicked entity is already highlighted, unselect it
-      setHighlightedEntity(null);
-      setClickedEntity(null);
-      setSelectedEntities(null);
-      setSelectedPocketIndex(null);
-    } else {
-      // Highlight the new clicked entity and show its pocket details
-      const pocket = pockets.find((pocket) => pocket.includes(entityId));
-      if (pocket) {
-        setClickedEntity(entityId);
-        setHighlightedEntity(entityId);
-        const sortedPocket = [
-          entityId,
-          ...pocket.filter((id) => id !== entityId),
-        ];
-        setSelectedEntities(sortedPocket);
-        setSelectedPocketIndex(pockets.indexOf(pocket));
-      }
-    }
-  };
-
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
     if (highlightedEntity === entityId) return "#bac334"; // Highlight the selected entity
@@ -159,7 +136,7 @@ export const Model = (): JSX.Element => {
         minNegRadius: entity.minNegRadius,
         edgeCurveChains: entity.edgeCurveChains,
       },
-    ]),
+    ])
   );
 
   return (
@@ -175,7 +152,7 @@ export const Model = (): JSX.Element => {
           <group>
             {modelEnts.map((ent, index) => {
               const isPocketEntity = pockets.some((pocket) =>
-                pocket.includes(ent.entityId),
+                pocket.includes(ent.entityId)
               );
               return (
                 <mesh
