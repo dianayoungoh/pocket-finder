@@ -8,8 +8,8 @@ import adjacencyGraph from "../data/adjacency_graph.json";
 import edgeMetadata from "../data/adjacency_graph_edge_metadata.json";
 import entityInfo from "../data/entity_geometry_info.json";
 import rgbToEntityMap from "../data/rgb_id_to_entity_id_map.json";
-
 import "./model.css";
+
 interface ModelEntity {
   bufferGeometry: THREE.BufferGeometry;
   entityId: string;
@@ -163,10 +163,8 @@ export const Model = (): JSX.Element => {
                 >
                   <meshStandardMaterial
                     metalness={1} // Fully metallic for a chrome-like effect
-                    // roughness={0.1} // Low roughness for a glossy finish
-                    //envMapIntensity={1} // Boost reflections
-                    // roughness={0.1} // Slightly smooth surface
-                    //envMapIntensity={0.2} // Subtle reflections
+                     roughness={0.8} // Low roughness for a glossy finish
+                    envMapIntensity={0.7} // Subtle reflections
                     normalScale={new THREE.Vector2(1, 1)} // Enhance depth effect
                     color={getEntityColor(ent.entityId)}
                   />
@@ -179,13 +177,7 @@ export const Model = (): JSX.Element => {
         {/* Dropdown for Pocket Selection */}
         <div
           className="bottom-module"
-          /*
-          style={{
-            position: "absolute",
-            bottom: 10,
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}*/
+         
         >
           <div className="bottom-module-container">
             <label>Pocket: </label>
@@ -217,13 +209,7 @@ export const Model = (): JSX.Element => {
               </p>
             )}
             <div className="pocket-grid">
-              {/*
-            <h3>
-              {clickedEntity
-                ? "Entity Details"
-                : `Pocket ${selectedPocketIndex! + 1} Details`}
-              </h3>*/}
-
+          
               {selectedEntities.map((entityId) => {
                 const metadata = entityInfoMap[entityId];
                 const isSelected = entityId === highlightedEntity;
