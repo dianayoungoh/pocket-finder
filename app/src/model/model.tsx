@@ -248,60 +248,7 @@ const handleEntityClick2= (entityId: string) => {
                 ? "Entity Details"
                 : `Pocket ${selectedPocketIndex! + 1} Details`}
               </h3>*/}
-{/*
-            {selectedEntities.map((entityId) => {
-              const metadata = entityInfoMap[entityId];
-              return (
-                <div
-                  key={entityId}
-                  style={{
-                   // marginBottom: "10px",
-                    backgroundColor:
-                      entityId === highlightedEntity
-                        ? "#feefa8"
-                        : "light-grey",
-                   // padding: "5px",
-                    //borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                  className= "pocket-squares"
-                  onClick={() => setHighlightedEntity(entityId)} // Highlight on entity selection
-                >
-                  <h4>
-                    {entityId === clickedEntity
-                      ? `🔹 Selected Entity ID: ${entityId}`
-                      : `Entity ID: ${entityId}`}
-                  </h4>
-                  {metadata ? (
-                    <ul>
-                      <li>
-                        <strong>Type:</strong> {metadata.entityType}
-                      </li>
-                      <li>
-                        <strong>Depth (Z):</strong>{" "}
-                        {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}
-                      </li>
-                      <li>
-                        <strong>Area:</strong>{" "}
-                        {metadata.area?.toFixed(2) ?? "N/A"}
-                      </li>
-                      <li>
-                        <strong>Center Point:</strong>{" "}
-                        {metadata.centerPoint?.join(", ") ?? "N/A"}
-                      </li>
-                      <li>
-                        <strong>Min Radius:</strong>{" "}
-                        {metadata.minRadius?.toFixed(2) ?? "N/A"}
-                      </li>
-                    </ul>
-                  ) : (
-                    <p>No metadata available.</p>
-                  )}
-                </div>
-              );
-            })}
 
-          */}
 {selectedEntities.map((entityId) => {
   const metadata = entityInfoMap[entityId];
   const isSelected = entityId === highlightedEntity;
@@ -347,7 +294,7 @@ const handleEntityClick2= (entityId: string) => {
             </div>
           </div>
         ) : (
-          <p>Select an entity or pocket to view details.</p>
+          <p> Select an entity or pocket to view details.</p>
         )}
       </div>
     </div>

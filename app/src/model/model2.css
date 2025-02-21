@@ -31,11 +31,20 @@
 }
 
 * {
-    outline: solid rgb(145, 113, 145);
+    /*outline: solid rgb(145, 113, 145);*/
     font-family: 'Calibri', sans-serif;  /*to do add a body tag*/
 }
 
-
+li {
+    /* outline: solid black; */
+    /* border-bottom-color: pink; */
+    /* outline: thin; */
+    border-bottom: solid;
+    border-color: grey;
+    /* border-style: dashed; */
+    border-bottom-width: thin;
+    border-bottom-style: dotted;
+}
 .title {
     font-size: 55px;
     letter-spacing: 7px;
@@ -44,7 +53,7 @@
 .pocket-squares {
     background-color: #80808030;
     border-radius: 3vh;
-    padding: 1.5vh;
+    padding: 2.3vh;
 }
 
 .canvas {
@@ -69,6 +78,23 @@ body {
     margin-right: 1vh;
     border-radius: 3vh;
     margin-bottom: 2vh;
+}
+.pocket-squares ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* padding: 4vh; */
+    /* margin: 1.5vh 0; */
+    /* margin-bottom: 2vh; */
+}
+/* Card hover effect */
+.pocket-squares:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+label {
+    font-weight: bold;
 }
 .canvas-block{
 
