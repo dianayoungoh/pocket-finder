@@ -6,11 +6,16 @@ type EntityInfo = Record<string, { centerNormal: number[] }>; // normal vector f
 const CONCAVE = 2;
 
 // Check if an edge is concave
-const isConcaveEdge = (id1: string, id2: string, edgeMetadata: EdgeMetadata): boolean => {
+const isConcaveEdge = (
+  id1: string,
+  id2: string,
+  edgeMetadata: EdgeMetadata,
+): boolean => {
   const edgeKey = `${id1}-${id2}`;
   const reverseEdgeKey = `${id2}-${id1}`;
   return (
-    (edgeMetadata[edgeKey]?.includes(CONCAVE) || edgeMetadata[reverseEdgeKey]?.includes(CONCAVE))
+    edgeMetadata[edgeKey]?.includes(CONCAVE) ||
+    edgeMetadata[reverseEdgeKey]?.includes(CONCAVE)
   );
 };
 
@@ -19,7 +24,7 @@ const bfs = (
   startEntity: string,
   adjacencyGraph: AdjacencyGraph,
   edgeMetadata: EdgeMetadata,
-  visited: Set<string>
+  visited: Set<string>,
 ): string[] => {
   const queue: string[] = [startEntity];
   const pocket: string[] = [];
@@ -30,7 +35,10 @@ const bfs = (
     pocket.push(current);
 
     for (const neighbor of adjacencyGraph[current] || []) {
-      if (!visited.has(neighbor) && isConcaveEdge(current, neighbor, edgeMetadata)) {
+      if (
+        !visited.has(neighbor) &&
+        isConcaveEdge(current, neighbor, edgeMetadata)
+      ) {
         visited.add(neighbor);
         queue.push(neighbor);
       }
@@ -40,10 +48,10 @@ const bfs = (
 };
 
 // main funciton to detect pockets
-const detectPockets =  (
+const detectPockets = (
   adjacencyGraph: AdjacencyGraph,
   edgeMetadata: EdgeMetadata,
-  entityInfo: EntityInfo
+  entityInfo: EntityInfo,
 ): string[][] => {
   const visited = new Set<string>();
   const pockets: string[][] = [];
