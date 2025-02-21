@@ -1,6 +1,5 @@
 type AdjacencyGraph = Record<string, string[]>; // face ID -> connected faces
 type EdgeMetadata = Record<string, number[]>; //  "ID1-ID2" -> [edge types]
-type EntityInfo = Record<string, { centerNormal: number[] }>; // normal vector for depth check
 
 // Enum for edge types
 const CONCAVE = 2;
@@ -31,7 +30,7 @@ const bfs = (
   visited.add(startEntity);
 
   while (queue.length > 0) {
-    const current = queue.shift()!;
+    const current = queue.shift();
     pocket.push(current);
 
     for (const neighbor of adjacencyGraph[current] || []) {
@@ -47,11 +46,10 @@ const bfs = (
   return pocket;
 };
 
-// main funciton to detect pockets
+// Main function to detect pockets
 const detectPockets = (
   adjacencyGraph: AdjacencyGraph,
   edgeMetadata: EdgeMetadata,
-  entityInfo: EntityInfo,
 ): string[][] => {
   const visited = new Set<string>();
   const pockets: string[][] = [];

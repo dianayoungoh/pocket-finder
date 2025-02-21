@@ -17,6 +17,25 @@ interface ModelEntity {
   depth?: number;
 }
 
+const entityInfoMap = Object.fromEntries(
+  entityInfo.map((entity) => [
+    entity.entityId,
+    {
+      entityId: entity.entityId,
+      entityType: entity.entityType,
+      centerUv: entity.centerUv,
+      centerPoint: entity.centerPoint,
+      centerNormal: entity.centerNormal,
+      area: entity.area,
+      minRadius: entity.minRadius,
+      minPosRadius: entity.minPosRadius,
+      minNegRadius: entity.minNegRadius,
+      edgeCurveChains: entity.edgeCurveChains,
+    },
+  ])
+);
+
+
 export const Model = (): JSX.Element => {
   const [modelEnts, setModelEnts] = useState<ModelEntity[]>([]);
   const [pockets, setPockets] = useState<string[][]>([]);
@@ -34,18 +53,9 @@ export const Model = (): JSX.Element => {
   useEffect(() => {
     if (!adjacencyGraph || !edgeMetadata || !entityInfo) return;
 
-    const entityInfoMap = Object.fromEntries(
-      entityInfo.map((entity) => [
-        entity.entityId,
-        { centerNormal: entity.centerNormal },
-      ])
-    );
-
     const detectedPockets = detectPockets(
       adjacencyGraph,
-      edgeMetadata,
-      entityInfoMap
-    );
+      edgeMetadata);
     setPockets(detectedPockets);
 
     new GLTFLoader().load("./colored_glb.glb", (gltf) => {
@@ -78,7 +88,7 @@ export const Model = (): JSX.Element => {
           bufferGeometry: meshElement.geometry,
           entityId,
           color: pocketColor,
-          depth: entityInfoMap[entityId]?.centerNormal[2],
+          depth: entityInfoMap[entityId]?.centerNormal?.[2],
         });
       });
 
@@ -121,29 +131,12 @@ export const Model = (): JSX.Element => {
     return "#dde9f7";
   };
 
-  const entityInfoMap = Object.fromEntries(
-    entityInfo.map((entity) => [
-      entity.entityId,
-      {
-        entityId: entity.entityId,
-        entityType: entity.entityType,
-        centerUv: entity.centerUv,
-        centerPoint: entity.centerPoint,
-        centerNormal: entity.centerNormal,
-        area: entity.area,
-        minRadius: entity.minRadius,
-        minPosRadius: entity.minPosRadius,
-        minNegRadius: entity.minNegRadius,
-        edgeCurveChains: entity.edgeCurveChains,
-      },
-    ])
-  );
 
   return (
-    <div className="main-body" /*style={{ display: "flex", height: "100vh" }}*/>
+    <div className="main-body">
       {/* Left side: 3D Canvas */}
       <div
-        className="canvas-container" /*style={{ flex: 3, position: "relative" }}*/
+        className="canvas-container" 
       >
         <Canvas className="canvas-block" camera={{ position: [0, 0, 300] }}>
           <ambientLight intensity={0.4} />
@@ -159,7 +152,6 @@ export const Model = (): JSX.Element => {
                   key={index}
                   geometry={ent.bufferGeometry}
                   onClick={() => handleEntityClick(ent.entityId)} // Handle entity click for pockets only
-                  //  onClick={() => isPocketEntity && handleEntityClick(ent.entityId)} // Only interact with pocket entities
                 >
                   <meshStandardMaterial
                     metalness={1} // Fully metallic for a chrome-like effect
