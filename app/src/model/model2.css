@@ -77,6 +77,8 @@ li {
     border-radius: 3vh;
     padding: 2.3vh;
     color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
 }
 
 .canvas {
