@@ -176,15 +176,17 @@ export const Model = (): JSX.Element => {
         </Canvas>
 
         {/* Dropdown for Pocket Selection */}
-        <div
+        <div className= "bottom-module"
+        /*
           style={{
             position: "absolute",
             bottom: 10,
             left: "50%",
             transform: "translateX(-50%)",
-          }}
+          }}*/
         >
-          <label>Select a Pocket: </label>
+          <div className= "bottom-module-container">
+          <label>Pocket: </label>
           <select
             value={selectedPocketIndex ?? ""}
             onChange={(e) => handlePocketSelection(parseInt(e.target.value))}
@@ -196,6 +198,7 @@ export const Model = (): JSX.Element => {
               </option>
             ))}
           </select>
+          </div>
         </div>
       </div>
 
@@ -210,8 +213,8 @@ export const Model = (): JSX.Element => {
         }}*/
       >
         {selectedEntities ? (
-          <div className= "pocket-grid">
-            {clickedEntity && (
+          <div className= "pocket-parent">
+                 {clickedEntity && (
               <p>
                 <strong>Pocket:</strong>{" "}
                 {selectedPocketIndex !== null
@@ -219,12 +222,16 @@ export const Model = (): JSX.Element => {
                   : "N/A"}
               </p>
             )}
+          <div className= "pocket-grid">
 
+            
+       
+{/*
             <h3>
               {clickedEntity
                 ? "Entity Details"
                 : `Pocket ${selectedPocketIndex! + 1} Details`}
-            </h3>
+              </h3>*/}
 
             {selectedEntities.map((entityId) => {
               const metadata = entityInfoMap[entityId];
@@ -232,15 +239,16 @@ export const Model = (): JSX.Element => {
                 <div
                   key={entityId}
                   style={{
-                    marginBottom: "10px",
+                   // marginBottom: "10px",
                     backgroundColor:
                       entityId === highlightedEntity
                         ? "#feefa8"
                         : "transparent",
-                    padding: "5px",
-                    borderRadius: "5px",
+                   // padding: "5px",
+                    //borderRadius: "5px",
                     cursor: "pointer",
                   }}
+                  className= "pocket-squares"
                   onClick={() => setHighlightedEntity(entityId)} // Highlight on entity selection
                 >
                   <h4>
@@ -285,6 +293,7 @@ export const Model = (): JSX.Element => {
             >
               Clear Selection
             </button>
+            </div>
           </div>
         ) : (
           <p>Select an entity or pocket to view details.</p>

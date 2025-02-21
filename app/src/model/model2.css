@@ -1,7 +1,14 @@
-.right-module{
-float:right
+.right-module {
+    float: right;
+    overflow-y: scroll;
+    border: solid;
+    border-radius: 3vh;
+    width: 55%;
+   /* height: calc(100vh - 80px);*/
+   height:100vh;
+    max-height: 100%;
+    /* height: fit-content; */
 }
-
 .pocket-grid {
     display: grid
 ;
@@ -9,22 +16,56 @@ float:right
     gap: 16px;
 }
 
-
-* {
-    outline: solid purple;
+.bottom-module-container{}
+.bottom-module {
+    border-color: grey;
+    outline: 2px solid;
+    border-radius: 3vh;
+    background-color: lightgrey;
+    height: 15vh;
+    justify-content: center;
+     display: flex
+; 
+    align-items: center;
 }
 
+* {
+    outline: solid rgb(145, 113, 145);
+    font-family: 'Calibri', sans-serif;  /*to do add a body tag*/
+}
+
+
+.title {
+    font-size: 55px;
+    letter-spacing: 7px;
+    font-weight: 1000;
+}
 .pocket-squares{
 
 }
 
+.canvas {
+    border: 2px solid;
+    border-radius: 3vh;
+    background: #80808017;
+}
+
+body {
+  /*  height: 100vh;*/
+  /* overflow: hidden;*/
+}
+
 .main-body{
-    display:flex
+    display:flex;
 }
 .canvas-container {
     width: 100vh;
-    height: 80vh;
+    height: 75vh;
 }
 .canvas-block{
+
+}
+
+.pocket-parent{
 
 }

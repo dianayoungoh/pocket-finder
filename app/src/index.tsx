@@ -4,13 +4,8 @@ import { Model } from './model/model';
 
 const App = () => (
     <React.Fragment>
-        <span> HADRIAN </span>
-        {/*}
-        <img 
-    src="/images/hadrian_logo_transparent.png" 
-    alt="Hadrian Logo" 
-            style={{ height: '50px' }} 
-/>*/}
+        <span className = "title"> HADRIAN </span>
+    
         <Model />
     </React.Fragment>
 );
