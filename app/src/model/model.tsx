@@ -119,7 +119,7 @@ export const Model = (): JSX.Element => {
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
     if (highlightedEntity === entityId) return "#bac334"; // Highlight the selected entity
-    if (selectedEntities?.includes(entityId)) return "#c88204"; // Highlight pocket entities
+    if (selectedEntities?.includes(entityId)) return "#c88204"; // Highlight pocket 
     return "#dde9f7";
   };
 
@@ -133,9 +133,7 @@ export const Model = (): JSX.Element => {
           <OrbitControls />
           <group>
             {modelEnts.map((ent, index) => {
-              const isPocketEntity = pockets.some((pocket) =>
-                pocket.includes(ent.entityId)
-              );
+            
               return (
                 <mesh
                   key={index}
