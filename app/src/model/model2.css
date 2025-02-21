@@ -24,7 +24,8 @@
     background-color: lightgrey;
     height: 15vh;
     justify-content: center;
-     display: flex
+     display: flex;
+     margin-top:1.5vh;
 ; 
     align-items: center;
 }
@@ -40,8 +41,10 @@
     letter-spacing: 7px;
     font-weight: 1000;
 }
-.pocket-squares{
-
+.pocket-squares {
+    background-color: #80808030;
+    border-radius: 3vh;
+    padding: 1.5vh;
 }
 
 .canvas {
@@ -60,7 +63,12 @@ body {
 }
 .canvas-container {
     width: 100vh;
-    height: 75vh;
+    height: 84vh;
+    /* margin: 2vh; */
+    border: solid;
+    margin-right: 1vh;
+    border-radius: 3vh;
+    margin-bottom: 2vh;
 }
 .canvas-block{
 

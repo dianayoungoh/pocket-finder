@@ -93,29 +93,55 @@ export const Model = (): JSX.Element => {
     setHighlightedEntity(null);
   };
 
-  // Handle entity click (only for pockets)
+
   const handleEntityClick = (entityId: string) => {
+    if (highlightedEntity === entityId) {
+      setHighlightedEntity(null);  // Deselect if clicked again
+      setClickedEntity(null);
+      setSelectedEntities(null);
+      setSelectedPocketIndex(null);
+    } else {
+      const pocket = pockets.find((pocket) => pocket.includes(entityId));
+      if (pocket) {
+        setClickedEntity(entityId);
+        setHighlightedEntity(entityId);  // Highlight only the clicked entity
+        setSelectedEntities([entityId, ...pocket.filter((id) => id !== entityId)]);
+        setSelectedPocketIndex(pockets.indexOf(pocket));
+      }
+    }
+  };
+  
+  // Handle entity click (only for pockets)
+const handleEntityClick2= (entityId: string) => {
+  if (highlightedEntity === entityId) {
+    // If the clicked entity is already highlighted, unselect it
+    setHighlightedEntity(null);
+    setClickedEntity(null);
+    setSelectedEntities(null);
+    setSelectedPocketIndex(null);
+  } else {
+    // Highlight the new clicked entity and show its pocket details
     const pocket = pockets.find((pocket) => pocket.includes(entityId));
     if (pocket) {
       setClickedEntity(entityId);
       setHighlightedEntity(entityId);
-      const sortedPocket = [
-        entityId,
-        ...pocket.filter((id) => id !== entityId),
-      ];
+      const sortedPocket = [entityId, ...pocket.filter((id) => id !== entityId)];
       setSelectedEntities(sortedPocket);
       setSelectedPocketIndex(pockets.indexOf(pocket));
     }
-  };
+  }
+};
+
 
   // Highlighting logic
   const getEntityColor = (entityId: string) => {
     if (highlightedEntity === entityId) return "#feefa8"; // Highlight the selected entity
     if (selectedEntities?.includes(entityId)) return "#f4cf24"; // Highlight pocket entities
     return "#dde9f7";
-    
- 
+  
   };
+
+  
 
   const entityInfoMap = Object.fromEntries(
     entityInfo.map((entity) => [
@@ -203,15 +229,7 @@ export const Model = (): JSX.Element => {
       </div>
 
       {/* Right side: Pocket & Entity Details */}
-      <div className= "right-module"
-      /*
-        style={{
-          flex: 1,
-          padding: "10px",
-          overflowY: "auto",
-          borderLeft: "1px solid #ddd",
-        }}*/
-      >
+      <div className= "right-module">
         {selectedEntities ? (
           <div className= "pocket-parent">
                  {clickedEntity && (
@@ -224,15 +242,13 @@ export const Model = (): JSX.Element => {
             )}
           <div className= "pocket-grid">
 
-            
-       
 {/*
             <h3>
               {clickedEntity
                 ? "Entity Details"
                 : `Pocket ${selectedPocketIndex! + 1} Details`}
               </h3>*/}
-
+{/*
             {selectedEntities.map((entityId) => {
               const metadata = entityInfoMap[entityId];
               return (
@@ -243,7 +259,7 @@ export const Model = (): JSX.Element => {
                     backgroundColor:
                       entityId === highlightedEntity
                         ? "#feefa8"
-                        : "transparent",
+                        : "light-grey",
                    // padding: "5px",
                     //borderRadius: "5px",
                     cursor: "pointer",
@@ -284,6 +300,41 @@ export const Model = (): JSX.Element => {
                 </div>
               );
             })}
+
+          */}
+{selectedEntities.map((entityId) => {
+  const metadata = entityInfoMap[entityId];
+  const isSelected = entityId === highlightedEntity;
+
+  return (
+    <div
+      key={entityId}
+      className="pocket-squares"
+      style={{
+        backgroundColor: isSelected ? "#feefa8" : "#dde9f7",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        setHighlightedEntity(entityId);  // Highlight the clicked entity
+        setClickedEntity(entityId);      // Ensure entity reflects in the canvas
+      }}
+    >
+      <h4>{isSelected ? `🔹 Selected Entity ID: ${entityId}` : `Entity ID: ${entityId}`}</h4>
+      {metadata ? (
+        <ul>
+          <li><strong>Type:</strong> {metadata.entityType}</li>
+          <li><strong>Depth (Z):</strong> {metadata.centerNormal?.[2]?.toFixed(2) ?? "N/A"}</li>
+          <li><strong>Area:</strong> {metadata.area?.toFixed(2) ?? "N/A"}</li>
+          <li><strong>Center Point:</strong> {metadata.centerPoint?.join(", ") ?? "N/A"}</li>
+          <li><strong>Min Radius:</strong> {metadata.minRadius?.toFixed(2) ?? "N/A"}</li>
+        </ul>
+      ) : (
+        <p>No metadata available.</p>
+      )}
+    </div>
+  );
+})}
+
             <button
               onClick={() => {
                 setSelectedEntities(null);
